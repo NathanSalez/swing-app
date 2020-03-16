@@ -1,0 +1,4 @@
+TODO : close db connection on frame's dispose.
+TODO : create README and explain the project
+TODO : make unit test
+TODO : add translation list

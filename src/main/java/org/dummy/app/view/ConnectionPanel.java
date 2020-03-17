@@ -22,8 +22,6 @@ public class ConnectionPanel extends JPanel
     private JButton signInButton;
     private JButton signUpButton;
 
-    public static String SUBTITLE = "Connection";
-
     private UserService userService;
 
     private PanelContainer p;
@@ -40,7 +38,7 @@ public class ConnectionPanel extends JPanel
             PasswordUtils.cleanPassword(passwd);
             p.setSessionId(userId);
             log.info("User {} connected.",userId);
-            p.switchTo("private",PrivatePanel.SUBTITLE);
+            p.switchTo("private");
             cleanInputs();
         } catch (DaoException e) {
             log.error(e.getMessage(),e);
@@ -60,11 +58,19 @@ public class ConnectionPanel extends JPanel
         passwordInput.setText("");
     }
 
+    private void setTranslations()
+    {
+        loginLabel.setText( p.getString("login"));
+        passwordLabel.setText( p.getString("passwd"));
+        signUpButton.setText( p.getString("register"));
+        signInButton.setText( p.getString("connect"));
+    }
+
     public ConnectionPanel(PanelContainer p) throws DaoException {
         this.p = p;
-
+        setTranslations();
         userService = new UserService();
-        signUpButton.addActionListener(actionEvent -> p.switchTo("register", RegisterPanel.SUBTITLE));
+        signUpButton.addActionListener(actionEvent -> p.switchTo("register"));
         signInButton.addActionListener(actionEvent -> connectUser());
     }
 

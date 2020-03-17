@@ -19,7 +19,7 @@ public class FileUtils
      * @return the Properties object corresponding to the resource file.
      * @throws IOException file not found.
      */
-    public static Properties getProperties(String filePath) throws IOException {
+    public Properties getProperties(String filePath) throws IOException {
         Objects.requireNonNull(filePath);
         Optional<InputStream> propertiesStream = Optional.ofNullable(FileUtils.class.getClassLoader().getResourceAsStream(filePath));
         Properties properties = new Properties();
@@ -36,7 +36,7 @@ public class FileUtils
      * @throws IOException the file is not readable or not found.
      * @return a string containing each character of the file.
      */
-    public static String getFileContent(String filePath) throws IOException
+    public String getFileContent(String filePath) throws IOException
     {
         Optional<InputStream> requiredResource = Optional.ofNullable(FileUtils.class.getClassLoader().getResourceAsStream(filePath));
 
@@ -45,5 +45,16 @@ public class FileUtils
                 .orElseThrow( () -> new FileNotFoundException(filePath + " not found or not readable."))
                 .readAllBytes()
         );
+    }
+
+    /**
+     * returns true if the file described by filePath exists.
+     * @param filePath an absolute path from '{main|test}/resources' directory.
+     * @return true if the file described by filePath exists.
+     */
+    public boolean exists(String filePath)
+    {
+        InputStream fileContent = FileUtils.class.getClassLoader().getResourceAsStream(filePath);
+        return fileContent != null;
     }
 }

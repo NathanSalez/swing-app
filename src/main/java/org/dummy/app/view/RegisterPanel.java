@@ -24,8 +24,6 @@ public class RegisterPanel {
 
     private UserService userService;
 
-    public static String SUBTITLE = "Register";
-
     private void registerUser()
     {
         try {
@@ -39,7 +37,7 @@ public class RegisterPanel {
             PasswordUtils.cleanPassword(passwd,confirmPasswd);
             log.info("User {} registered.",userId);
             p.setSessionId(userId);
-            p.switchTo("private",PrivatePanel.SUBTITLE);
+            p.switchTo("private");
             cleanInputs();
         } catch (DaoException e) {
             log.error(e.getMessage(),e);
@@ -57,13 +55,22 @@ public class RegisterPanel {
         confirmPasswordInput.setText("");
     }
 
+    private void setTranslations()
+    {
+        loginLabel.setText( p.getString("login"));
+        passwordLabel.setText( p.getString("passwd"));
+        confirmPasswordLabel.setText( p.getString("passwd.confirm"));
+        signUpButton.setText( p.getString("register"));
+        signInButton.setText( p.getString("connect"));
+    }
+
     public RegisterPanel(PanelContainer p) throws DaoException
     {
         this.p = p;
 
         userService = new UserService();
 
-        signInButton.addActionListener(actionEvent -> p.switchTo("connection", ConnectionPanel.SUBTITLE));
+        signInButton.addActionListener(actionEvent -> p.switchTo("connection"));
         signUpButton.addActionListener(actionEvent -> registerUser());
     }
 

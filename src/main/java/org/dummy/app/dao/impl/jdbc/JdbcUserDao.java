@@ -108,6 +108,6 @@ public class JdbcUserDao extends JdbcDao<User> implements UserDao, RowMapper<Use
     private JdbcUserDao() throws DaoException
     {
         super();
-        recordPublisher.subscribe( new UserSubscriber(UserListTable.getInstance(null)));
+        recordPublisher.subscribe( new UserSubscriber(UserListTable.getInstance(findAll())));
     }
 }

@@ -1,11 +1,15 @@
 package org.dummy.app.view;
 
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.dummy.app.exception.DaoException;
+import org.dummy.app.utils.I18NUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * Identify the graphic structure of the application's frame.<br/>
@@ -15,11 +19,11 @@ import java.awt.event.ActionEvent;
 @Log4j2
 public class PanelContainer extends JPanel {
 
-    CardLayout layoutManager;
+    private CardLayout layoutManager;
 
     private Application p;
 
-    private JComboBox<String> listTranslation;
+    private ResourceBundle languageData;
 
     private JLabel subtitle;
 
@@ -31,27 +35,28 @@ public class PanelContainer extends JPanel {
 
     private JButton quitButton;
 
-    public PanelContainer(Application p)
+    public PanelContainer(Application p, String language)
     {
         this.p = p;
-
-        buildTopPanel();
-
-        buildBottomPanel();
 
         layoutManager = new CardLayout();
         centerPanel = new JPanel();
         centerPanel.setLayout(layoutManager);
         try {
+            languageData = I18NUtils.getPanelTranslation("translations",language);
             centerPanel.add(new ConnectionPanel(this).getRootPanel(), "connection");
             centerPanel.add(new RegisterPanel(this).getRootPanel(), "register");
             centerPanel.add(new PrivatePanel(this).getRootPanel(),"private");
-        } catch (DaoException e) {
-            log.error(e.getMessage(),e);
-            JOptionPane.showMessageDialog( null, "The application failed to start, please contact an administrator.", "Fatal error", JOptionPane.ERROR_MESSAGE);
+        } catch (DaoException | MissingResourceException e) {
+            log.error(e.getMessage(), e);
+            JOptionPane.showMessageDialog(null, "The application failed to start, please contact an administrator.", "Fatal error", JOptionPane.ERROR_MESSAGE);
             SwingUtilities.invokeLater(p::dispose);
         }
-        switchTo("connection", ConnectionPanel.SUBTITLE);
+
+        buildTopPanel();
+        buildBottomPanel();
+
+        switchTo("connection");
 
         this.setLayout( new BorderLayout());
         this.add(topPanel, BorderLayout.NORTH);
@@ -83,41 +88,28 @@ public class PanelContainer extends JPanel {
     {
         buildQuitButton();
 
-        buildListTranslation();
-
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.LINE_AXIS));
         bottomPanel.setBackground( new Color(254, 254, 226));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         bottomPanel.add(Box.createHorizontalGlue());
-        bottomPanel.add(listTranslation);
-        bottomPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         bottomPanel.add(quitButton);
     }
 
     private void buildQuitButton()
     {
-        this.quitButton = new JButton("Exit");
+        this.quitButton = new JButton(languageData.getString("exit"));
         this.quitButton.setFont( Application.FONT_BUTTON);
         this.quitButton.addActionListener((ActionEvent e) -> {p.dispose();});
-    }
-
-    private void buildListTranslation()
-    {
-        this.listTranslation = new JComboBox<>();
-        this.listTranslation.addItem("Français");
-        this.listTranslation.addItem("English");
-        this.listTranslation.setFont( Application.FONT_BUTTON);
     }
 
     /**
      * Switch to another view with its name.<br/>
      * @param page Name of the view to display
-     * @param subtitle Subtitle to insert.
      */
-    public void switchTo(String page, String subtitle)
+    public void switchTo(@NonNull String page)
     {
-        setSubtitle(subtitle);
+        setSubtitle(languageData.getString("subtitle." + page));
         layoutManager.show( centerPanel, page );
     }
 
@@ -129,6 +121,19 @@ public class PanelContainer extends JPanel {
     public int getSessionId()
     {
         return p.getUserSessionId();
+    }
+
+    public String getString(String key)
+    {
+        String translatedKey = key;
+        try
+        {
+            translatedKey = languageData.getString(key);
+        }catch (MissingResourceException e)
+        {
+            log.warn("Key '" + key + "' is missing for resource bundle " + languageData.getLocale() + ".");
+        }
+        return translatedKey;
     }
 
 }

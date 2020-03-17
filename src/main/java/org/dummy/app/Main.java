@@ -13,9 +13,7 @@ public class Main
         log.info("Hello there");
         SwingUtilities.invokeLater(
                 () -> {
-                    Application ac1 = new Application();
-                    Application ac2 = new Application();
-                    Application ac3 = new Application();
+                    Application ac1 = new Application("Français");
                 }
         );
     }

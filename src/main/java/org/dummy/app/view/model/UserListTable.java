@@ -23,29 +23,18 @@ public class UserListTable extends AbstractTableModel
 
     private static UserListTable instance;
 
-    public static UserListTable getInstance(Collection<User> users)
+    public static UserListTable getInstance(@NonNull Collection<User> users)
     {
         if( instance == null)
         {
-            if( users == null)
-                instance = new UserListTable();
-            else
-                instance = new UserListTable(users);
-
-
+            instance = new UserListTable(users);
         }
 
         return instance;
 
     }
 
-    private UserListTable()
-    {
-        this.users = new ArrayList<>();
-    }
-
     private UserListTable(Collection<User> users) {
-        Objects.requireNonNull(users);
         this.users = new ArrayList<>(users);
     }
 

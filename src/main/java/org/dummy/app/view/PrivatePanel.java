@@ -18,18 +18,22 @@ public class PrivatePanel extends JPanel
     private JPanel rootPanel;
     private JButton disconnectButton;
 
-    public static String SUBTITLE = "Welcome !";
-
     private PanelContainer p;
 
     private UserService userService;
 
+    private void setTranslations()
+    {
+        disconnectButton.setText( p.getString("disconnect"));
+    }
+
     public PrivatePanel(PanelContainer p) throws DaoException {
         this.p = p;
         userService = new UserService();
+        setTranslations();
         disconnectButton.addActionListener(
             actionEvent -> {
-                p.switchTo("connection", ConnectionPanel.SUBTITLE);
+                p.switchTo("connection");
                 log.info("User {} disconnected.", p.getSessionId());
                 p.setSessionId(0);
             }

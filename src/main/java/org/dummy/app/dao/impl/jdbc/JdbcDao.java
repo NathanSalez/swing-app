@@ -89,8 +89,8 @@ public abstract class JdbcDao<T> implements Dao<T> {
             databaseProperties.getProperty("password")
         );
 
-       Optional<String> optionalScriptFilePath = Optional.ofNullable( databaseProperties.getProperty("sql") );
-       optionalScriptFilePath.ifPresent(
+       Optional<String> scriptFilePath = Optional.ofNullable( databaseProperties.getProperty("sql") );
+       scriptFilePath.ifPresent(
            filePath -> {
                try {
                    executeScript(connector, FileUtils.getFileContent(filePath));

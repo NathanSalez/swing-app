@@ -6,8 +6,6 @@ import org.dummy.app.view.model.UserListTable;
 
 import java.util.concurrent.Flow;
 
-import static java.lang.Thread.sleep;
-
 @Log4j2
 public class UserSubscriber implements Flow.Subscriber<Record<User>>
 {

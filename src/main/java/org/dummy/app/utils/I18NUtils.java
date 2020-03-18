@@ -1,7 +1,5 @@
 package org.dummy.app.utils;
 
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
 import lombok.experimental.UtilityClass;
 
 import java.util.Locale;
@@ -10,7 +8,6 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 @UtilityClass
-@FieldDefaults(level= AccessLevel.PRIVATE)
 public class I18NUtils
 {
     public static final Map<String,Locale> translationLanguages = Map.of(

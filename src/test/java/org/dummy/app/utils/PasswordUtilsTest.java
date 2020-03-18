@@ -1,13 +1,10 @@
 package org.dummy.app.utils;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class PasswordEncryptorTest
+class PasswordUtilsTest
 {
 
 
@@ -23,5 +20,6 @@ class PasswordEncryptorTest
         System.out.println(Arrays.hashCode(passwd2));
         System.out.println(Arrays.hashCode(passwd3));
         System.out.println(Arrays.hashCode(passwd4));
+        System.out.println(Arrays.hashCode( "nathan".toCharArray()));
     }
 }
